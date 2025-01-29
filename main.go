@@ -95,15 +95,10 @@ func extractPDFFields(pdfPath string) error {
 	}
 	defer f.Close()
 
-	// Extract form fields using the API
+	// Get form fields
 	fields, err := api.FormFields(f, nil)
 	if err != nil {
 		return fmt.Errorf("error listing form fields: %w", err)
-	}
-
-	if len(fields) == 0 {
-		log.Println("No fillable fields found in the PDF.")
-		return nil
 	}
 
 	type FieldInfo struct {
@@ -117,15 +112,12 @@ func extractPDFFields(pdfPath string) error {
 
 	var formFields FormFields
 
+	// Process form fields
 	for _, field := range fields {
-		// Extract field type and name from the Value string
 		parts := strings.Fields(fmt.Sprintf("%v", field))
 		if len(parts) >= 3 {
 			fieldType := parts[2]
 			fieldName := strings.Join(parts[3:], " ")
-
-			// Clean up the field name
-			// Remove the number prefix and any trailing "}"
 			cleanName := fieldName
 			if idx := strings.Index(fieldName, " "); idx != -1 {
 				cleanName = strings.TrimSpace(fieldName[idx:])
@@ -137,9 +129,6 @@ func extractPDFFields(pdfPath string) error {
 				Type: fieldType,
 			})
 		}
-
-		// Add this temporarily to see the raw field data
-		fmt.Printf("Raw field data: %v\n", field)
 	}
 
 	// Convert to JSON and print
