@@ -1,4 +1,4 @@
-module joseph
+module github.com/josephmowjew/form-field-extractor
 
 go 1.23.4
 

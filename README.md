@@ -1,6 +1,6 @@
 # Form Field Extractor
 
-A powerful Go application that extracts form fields from both PDF files and HTML web forms. This tool automatically detects the input type (PDF or HTML) and returns a standardized JSON output of all form fields, including their names, types, labels, and required status.
+A powerful Go library and CLI tool that extracts form fields from both PDF files and HTML web forms. This tool automatically detects the input type (PDF or HTML) and returns a standardized JSON output of all form fields, including their names, types, labels, and required status.
 
 ## Features
 
@@ -21,18 +21,29 @@ A powerful Go application that extracts form fields from both PDF files and HTML
 
 ## Installation
 
+### As a Library
+
+```bash
+go get github.com/josephmowjew/form-field-extractor
+```
+
+### As a CLI Tool
+
 ```bash
 # Clone the repository
-git clone [your-repo-url]
-cd [your-repo-name]
+git clone https://github.com/josephmowjew/form-field-extractor.git
+cd form-field-extractor
 
 # Install dependencies
 go mod download
+
+# Build the CLI tool
+go build -o scrapper ./cmd/scrapper
 ```
 
 ## Usage
 
-### Basic Usage
+### Library Usage
 
 ```go
 package main
@@ -41,32 +52,55 @@ import (
     "encoding/json"
     "fmt"
     "log"
+    "time"
+    
+    "github.com/josephmowjew/form-field-extractor/pkg/scrapper"
 )
 
 func main() {
-    cfg := DefaultConfig()
+    // Create a new scrapper instance with options
+    s := scrapper.New(
+        scrapper.WithTimeout(30 * time.Second),
+        scrapper.WithMaxAttempts(3),
+    )
     
-    // For PDF forms
-    cfg.URL = "https://example.com/form.pdf"
-    
-    // Or for HTML forms
-    // cfg.URL = "https://example.com/form.html"
-    
-    if err := run(cfg); err != nil {
-        log.Fatalf("Application error: %v", err)
+    // Extract fields from a URL (PDF or HTML)
+    fields, err := s.ExtractFields("https://example.com/form.pdf")
+    if err != nil {
+        log.Fatalf("Failed to extract fields: %v", err)
     }
+    
+    // Convert to JSON
+    jsonData, err := json.MarshalIndent(fields, "", "  ")
+    if err != nil {
+        log.Fatalf("Failed to marshal JSON: %v", err)
+    }
+    
+    fmt.Println(string(jsonData))
 }
+```
+
+### CLI Usage
+
+```bash
+# Extract fields from a PDF form
+./scrapper -url https://example.com/form.pdf
+
+# Extract fields from an HTML form with custom timeout
+./scrapper -url https://example.com/form.html -timeout 45s
+
+# Show help
+./scrapper -help
 ```
 
 ### Configuration Options
 
+The library supports the following configuration options:
+
 ```go
-type Config struct {
-    URL         string        // URL of the PDF or HTML form
-    Timeout     time.Duration // Timeout for operations
-    OutputPath  string        // Path for output (if needed)
-    MaxAttempts int          // Maximum retry attempts
-}
+// Available options
+scrapper.WithTimeout(30 * time.Second)  // Set operation timeout
+scrapper.WithMaxAttempts(3)             // Set maximum retry attempts
 ```
 
 ### Example Output
@@ -90,13 +124,15 @@ type Config struct {
 
 ## API Documentation
 
-### FormExtractor Interface
+### Main Interface
 
 ```go
-type FormExtractor interface {
-    Extract() ([]FormField, error)
-    Close() error
+type Scrapper interface {
+    ExtractFields(url string) ([]FormField, error)
 }
+
+// Create a new scrapper instance
+scrapper := New(options ...Option)
 ```
 
 ### FormField Structure
