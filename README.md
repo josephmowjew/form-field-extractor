@@ -4,7 +4,7 @@ A powerful Go library and CLI tool that extracts form fields from both PDF files
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/josephmowjew/form-field-extractor.svg)](https://pkg.go.dev/github.com/josephmowjew/form-field-extractor)
 [![Go Report Card](https://goreportcard.com/badge/github.com/josephmowjew/form-field-extractor)](https://goreportcard.com/report/github.com/josephmowjew/form-field-extractor)
-![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.1.1-blue.svg)
 
 ## Features
 
