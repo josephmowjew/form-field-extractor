@@ -2,6 +2,10 @@
 
 A powerful Go library and CLI tool that extracts form fields from both PDF files and HTML web forms. This tool automatically detects the input type (PDF or HTML) and returns a standardized JSON output of all form fields, including their names, types, labels, and required status.
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/josephmowjew/form-field-extractor.svg)](https://pkg.go.dev/github.com/josephmowjew/form-field-extractor)
+[![Go Report Card](https://goreportcard.com/badge/github.com/josephmowjew/form-field-extractor)](https://goreportcard.com/report/github.com/josephmowjew/form-field-extractor)
+![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)
+
 ## Features
 
 - 🔄 Unified extraction interface for both PDF and HTML forms
@@ -24,7 +28,11 @@ A powerful Go library and CLI tool that extracts form fields from both PDF files
 ### As a Library
 
 ```bash
+# Latest version
 go get github.com/josephmowjew/form-field-extractor
+
+# Specific version
+go get github.com/josephmowjew/form-field-extractor@v0.1.0
 ```
 
 ### As a CLI Tool
@@ -33,6 +41,9 @@ go get github.com/josephmowjew/form-field-extractor
 # Clone the repository
 git clone https://github.com/josephmowjew/form-field-extractor.git
 cd form-field-extractor
+
+# Checkout specific version (optional)
+git checkout v0.1.0
 
 # Install dependencies
 go mod download
